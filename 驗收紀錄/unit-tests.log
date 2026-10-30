@@ -1,0 +1,37 @@
+customtkinter.windows.widgets.font warning: Preferred drawing method 'font_shapes' can not be used because the font file could not be loaded.
+Using 'circle_shapes' instead. The rendering quality will be bad!
+test_128_bit_encryption (test_core.CoreTests.test_128_bit_encryption) ... ok
+test_bad_password_characters (test_core.CoreTests.test_bad_password_characters) ... ok
+test_cancel_during_prompt (test_core.CoreTests.test_cancel_during_prompt) ... ok
+test_cancel_remaining_finishes_current (test_core.CoreTests.test_cancel_remaining_finishes_current) ... ok
+test_collision_preserves_existing (test_core.CoreTests.test_collision_preserves_existing) ... ok
+test_corrupt_and_missing_continue (test_core.CoreTests.test_corrupt_and_missing_continue) ... ok
+test_failed_verification_never_publishes (test_core.CoreTests.test_failed_verification_never_publishes) ... ok
+test_individual_skip_and_no_password_file (test_core.CoreTests.test_individual_skip_and_no_password_file) ... ok
+test_missing_qpdf (test_core.CoreTests.test_missing_qpdf) ... ok
+test_output_failure_cleans_temp (test_core.CoreTests.test_output_failure_cleans_temp) ... ok
+test_output_folder_is_file (test_core.CoreTests.test_output_folder_is_file) ... ok
+test_owner_password_accepted (test_core.CoreTests.test_owner_password_accepted) ... ok
+test_password_only_in_pipe_and_no_shell (test_core.CoreTests.test_password_only_in_pipe_and_no_shell) ... ok
+test_recursive_deduplicate_exclude_output (test_core.CoreTests.test_recursive_deduplicate_exclude_output) ... ok
+test_timeout_is_sanitized (test_core.CoreTests.test_timeout_is_sanitized) ... ok
+test_types_unicode_and_original_hashes (test_core.CoreTests.test_types_unicode_and_original_hashes) ... ok
+test_wrong_common_retry_then_success (test_core.CoreTests.test_wrong_common_retry_then_success) ... ok
+test_directory_errors_prune_only_bad_child (test_v101.DiscoveryFaultTests.test_directory_errors_prune_only_bad_child) ... ok
+test_file_errors_keep_prior_and_later_results (test_v101.DiscoveryFaultTests.test_file_errors_keep_prior_and_later_results) ... ok
+test_top_level_error_continues_to_next_input (test_v101.DiscoveryFaultTests.test_top_level_error_continues_to_next_input) ... ok
+test_walk_error_and_cancellation (test_v101.DiscoveryFaultTests.test_walk_error_and_cancellation) ... ok
+test_cancellation (test_v101.WorkerOutcomeTests.test_cancellation) ... ok
+test_exception_preserves_results_and_marks_unfinished (test_v101.WorkerOutcomeTests.test_exception_preserves_results_and_marks_unfinished) ... ok
+test_failure_before_first_file_marks_all_pending (test_v101.WorkerOutcomeTests.test_failure_before_first_file_marks_all_pending) ... ok
+test_normal_completion (test_v101.WorkerOutcomeTests.test_normal_completion) ... ok
+test_bundle_beats_path (test_portable.PortableTests.test_bundle_beats_path) ... ok
+test_bundle_runs_without_path (test_portable.PortableTests.test_bundle_runs_without_path) ... ok
+test_explicit_override_retained (test_portable.PortableTests.test_explicit_override_retained) ... ok
+test_frozen_resource_location (test_portable.PortableTests.test_frozen_resource_location) ... ok
+test_missing_bundle_uses_system (test_portable.PortableTests.test_missing_bundle_uses_system) ... ok
+
+----------------------------------------------------------------------
+Ran 30 tests in 4.833s
+
+OK

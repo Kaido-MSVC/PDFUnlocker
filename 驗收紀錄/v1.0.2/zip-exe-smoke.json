@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "frozen": true,
+  "qpdf_executable": "C:\\Users\\max00\\AppData\\Local\\Temp\\claude\\D--projects-PDFUnlocker\\aae06061-4f90-431a-89bf-ef538e452e90\\scratchpad\\r3\\解壓驗收_日本語 & [分享]\\PDFUnlocker-v1.0.2-Portable\\PDFUnlocker\\_internal\\tools\\qpdf\\qpdf.exe",
+  "path": "",
+  "qpdf_version": "12.4.2",
+  "counts": {
+    "success": 2,
+    "fail": 1,
+    "skip": 1
+  },
+  "gui_heartbeat_ticks": 51,
+  "individual_password_dialog": true,
+  "original_hashes_unchanged": true,
+  "cancel_dialog_counts": {
+    "success": 0,
+    "fail": 0,
+    "skip": 2
+  },
+  "async_folder_scan": true,
+  "abnormal_worker_status": true,
+  "unfinished_rows_marked": true,
+  "minimum_window": [
+    860,
+    620
+  ],
+  "window_icon_configured": true
+}

@@ -1,0 +1,79 @@
+--- v1.0.1/core.py
++++ portable/core.py
+@@ -5,12 +5,17 @@
+ from pathlib import Path
+ import shutil
+ import subprocess
++import sys
+ import tempfile
+ import threading
+ from dataclasses import dataclass
+ from collections.abc import Callable
+ 
+ TIMEOUT = 300
++
++
++def bundled_qpdf() -> Path:
++    return Path(getattr(sys, '_MEIPASS', Path(__file__).parent)) / 'tools' / 'qpdf' / 'qpdf.exe'
+ 
+ 
+ class ProcessingError(Exception):
+@@ -27,9 +32,10 @@
+ 
+ class Qpdf:
+     def __init__(self, executable: str | None = None):
+-        self.executable = executable or shutil.which('qpdf')
++        bundled = bundled_qpdf()
++        self.executable = executable or (str(bundled) if bundled.is_file() else shutil.which('qpdf'))
+         if not self.executable:
+-            raise ProcessingError('找不到 qpdf，請確認已安裝且 PATH 可找到 qpdf.exe。')
++            raise ProcessingError('找不到 qpdf，請完整解壓分享包並保留 _internal 資料夾；亦可使用系統已安裝的 qpdf。')
+ 
+     def run(self, args: list[str], password: str = '') -> subprocess.CompletedProcess:
+         if any(c in password for c in ('\r', '\n', '\x00')):
+@@ -45,7 +51,7 @@
+         except subprocess.TimeoutExpired:
+             raise ProcessingError('qpdf 處理超過 5 分鐘，已終止該次操作。') from None
+         except OSError:
+-            raise ProcessingError('無法啟動 qpdf，請檢查安裝與存取權限。') from None
++            raise ProcessingError('無法啟動 qpdf，請確認分享包已完整解壓（含 DLL），並檢查存取權限。') from None
+ 
+     def kind(self, path: Path, password: str = '') -> str:
+         probe = self.run(['--requires-password', str(path)], password)
+--- v1.0.1/build.ps1
++++ portable/build.ps1
+@@ -6,5 +6,9 @@
+ $appIcon = Join-Path $PSScriptRoot 'assets/app.ico'
+ $appAssets = Join-Path $PSScriptRoot 'assets'
+ $runtimeHook = Join-Path $PSScriptRoot 'windowed_runtime.py'
+-python -m PyInstaller --noconfirm --clean --onedir --windowed --noupx --name PDFUnlocker --icon $appIcon --add-data "$appAssets;assets" --collect-all customtkinter --runtime-hook $runtimeHook --hidden-import smoke --hidden-import test_core --distpath ../app --workpath $BuildWork --specpath $BuildWork app.py
++$qpdfBundle = Join-Path $PSScriptRoot 'tools/qpdf'
++foreach ($required in @('qpdf.exe', 'qpdf30.dll', 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll')) {
++    if (-not (Test-Path -LiteralPath (Join-Path $qpdfBundle $required))) { throw "Missing bundled qpdf file: $required" }
++}
++python -m PyInstaller --noconfirm --clean --onedir --windowed --noupx --name PDFUnlocker --icon $appIcon --add-data "$appAssets;assets" --add-data "$qpdfBundle;tools/qpdf" --collect-all customtkinter --runtime-hook $runtimeHook --hidden-import smoke --hidden-import test_core --distpath ../app --workpath $BuildWork --specpath $BuildWork app.py
+ if ($LASTEXITCODE -ne 0) { throw 'PyInstaller failed' }
+--- v1.0.1/test_core.py
++++ portable/test_core.py
+@@ -201,7 +201,7 @@
+         self.assertEqual(blocked.read_bytes(), b'keep this existing file')
+ 
+     def test_missing_qpdf(self):
+-        with patch('core.shutil.which', return_value=None):
++        with patch('core.bundled_qpdf', return_value=self.folder / 'missing-qpdf.exe'), patch('core.shutil.which', return_value=None):
+             with self.assertRaises(ProcessingError):
+                 Qpdf()
+ 
+--- v1.0.1/smoke.py
++++ portable/smoke.py
+@@ -23,6 +23,10 @@
+             restricted = create_fixture(folder, '繁中 日本語 & [#] 😀.pdf')
+             locked = create_fixture(folder, '開啟密碼.pdf', '測試密碼')
+             qpdf = Qpdf()
++            from core import bundled_qpdf
++            assert Path(qpdf.executable) == bundled_qpdf()
++            data.update(qpdf_executable=qpdf.executable, path=__import__('os').environ.get('PATH'),
++                        qpdf_version='12.4.2')
+             plain, _ = qpdf.decrypt(restricted, '')
+             broken = folder / '損壞.pdf'
+             broken.write_bytes(b'not a pdf')

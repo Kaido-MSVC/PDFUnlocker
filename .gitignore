@@ -1,0 +1,16 @@
+# Python virtual environment (recreate from source/requirements.lock.txt)
+.venv/
+
+# PyInstaller intermediates and raw build output (build.ps1 writes ../app)
+/source/build/
+/app/
+*.spec
+
+# Release outputs: the built share package (rebuild with source/build.ps1) and archived ZIPs.
+# archives/SHA256SUMS.txt and the archived acceptance reports stay tracked.
+/PDFUnlocker/
+/archives/*.zip
+
+# Python bytecode
+__pycache__/
+*.py[co]

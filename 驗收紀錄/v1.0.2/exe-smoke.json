@@ -1,0 +1,28 @@
+{
+  "ok": true,
+  "frozen": true,
+  "qpdf_executable": "D:\\projects\\PDFUnlocker\\app\\PDFUnlocker\\_internal\\tools\\qpdf\\qpdf.exe",
+  "path": "",
+  "qpdf_version": "12.4.2",
+  "counts": {
+    "success": 2,
+    "fail": 1,
+    "skip": 1
+  },
+  "gui_heartbeat_ticks": 49,
+  "individual_password_dialog": true,
+  "original_hashes_unchanged": true,
+  "cancel_dialog_counts": {
+    "success": 0,
+    "fail": 0,
+    "skip": 2
+  },
+  "async_folder_scan": true,
+  "abnormal_worker_status": true,
+  "unfinished_rows_marked": true,
+  "minimum_window": [
+    860,
+    620
+  ],
+  "window_icon_configured": true
+}

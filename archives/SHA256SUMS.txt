@@ -1,0 +1,5 @@
+a7430eaafd2d83893caaa6ca9949e609dbb83db240514a33d28d84751e50f055  PDFUnlocker-v1.0.1-Portable-source.zip
+a835d768577d50e717af564e7bca3e17dc7b10bdd388cc632107a83cb3dbfb77  PDFUnlocker-v1.0.1-Portable-Windows-x64.zip
+b13a6c0aec0b76f408ff1cd7df121552e6361ff3b9a78598660d39342572a4f5  PDFUnlocker-v1.0.1-免設定分享版-驗收報告.md
+e945b1c98dfbe8f02a921489523bd62bebe937f720215b4a1b4dcdd61918ee85  PDFUnlocker-v1.0.2-Portable-Windows-x64.zip
+d70100daba89bcc5b623909324a4d0e7298ae7fa91505061417831c4c7d1a6d6  PDFUnlocker-v1.0.2-免設定分享版-驗收報告.md

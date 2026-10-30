@@ -1,0 +1,97 @@
+366 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.9
+366 INFO: Python: 3.13.16
+395 INFO: Platform: Windows-11-10.0.26200-SP0
+395 INFO: Python environment: C:\Users\max00\AppData\Local\Programs\Python\Python313
+396 INFO: wrote D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker.spec
+412 INFO: Removing temporary files and cleaning cache in C:\Users\max00\AppData\Local\Packages\sandbox.{5db12f7a-cd23-4b7b-bb10-30acfbac78a0}\AC\pyinstaller
+customtkinter.windows.widgets.font warning: Preferred drawing method 'font_shapes' can not be used because the font file could not be loaded.
+Using 'circle_shapes' instead. The rendering quality will be bad!
+3400 INFO: Module search paths (PYTHONPATH):
+['D:\\GPT-Work\\2026-10-23\\referenced-chatgpt-conversation-this-is-an-12\\work\\source',
+ 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\python313.zip',
+ 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\DLLs',
+ 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib',
+ 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313',
+ 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages',
+ 'D:\\GPT-Work\\2026-10-23\\referenced-chatgpt-conversation-this-is-an-12\\work\\source']
+4564 INFO: Appending 'datas' from .spec
+4596 INFO: checking Analysis
+4596 INFO: Building Analysis because Analysis-00.toc is non existent
+4596 INFO: Looking for Python shared library...
+4597 INFO: Using Python shared library: C:\Users\max00\AppData\Local\Programs\Python\Python313\python313.dll
+4597 INFO: Running Analysis Analysis-00.toc
+4597 INFO: Target bytecode optimization level: 0
+4597 INFO: Initializing module dependency graph...
+4601 INFO: Initializing module graph hook caches...
+4648 INFO: Analyzing modules for base_library.zip ...
+6828 INFO: Processing standard module hook 'hook-math.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+7356 INFO: Processing standard module hook 'hook-encodings.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+8484 INFO: Processing standard module hook 'hook-heapq.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+9693 INFO: Processing standard module hook 'hook-pickle.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+11471 INFO: Caching module dependency graph...
+11512 INFO: Analyzing D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\source\app.py
+11553 INFO: Processing pre-find-module-path hook 'hook-tkinter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\pre_find_module_path'
+11560 INFO: TclTkInfo: initializing cached Tcl/Tk info...
+12544 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+12657 INFO: Processing standard module hook 'hook-customtkinter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+13189 INFO: Processing standard module hook 'hook-platform.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+13238 INFO: Processing standard module hook 'hook-sysconfig.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+13247 INFO: Processing standard module hook 'hook-_ctypes.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+13258 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+13261 INFO: SetuptoolsInfo: initializing cached setuptools info...
+14929 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\pre_safe_import_module'
+15214 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+15413 INFO: Processing standard module hook 'hook-xml.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+16377 INFO: Processing standard module hook 'hook-PIL.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+16494 INFO: Processing standard module hook 'hook-PIL.Image.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+17266 INFO: Processing standard module hook 'hook-numpy.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+19315 INFO: Processing standard module hook 'hook-webbrowser.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+20707 INFO: Processing standard module hook 'hook-difflib.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+21246 INFO: Processing standard module hook 'hook-psutil.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+21839 INFO: Processing standard module hook 'hook-charset_normalizer.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\_pyinstaller_hooks_contrib\\stdhooks'
+22394 INFO: Processing standard module hook 'hook-xml.etree.cElementTree.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+22653 INFO: Processing standard module hook 'hook-PIL.ImageFilter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+23498 INFO: Processing module hooks (post-graph stage)...
+23879 INFO: Processing standard module hook 'hook-PIL.SpiderImagePlugin.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+23978 INFO: Processing standard module hook 'hook-_tkinter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks'
+23991 INFO: Performing binary vs. data reclassification (996 entries)
+24623 INFO: Looking for ctypes DLLs
+24666 WARNING: Ignoring AppKit.framework/AppKit imported from C:\Users\max00\AppData\Local\Programs\Python\Python313\Lib\site-packages\darkdetect\_mac_detect.py - only basenames are supported with ctypes imports!
+24735 INFO: Analyzing run-time hooks ...
+24735 INFO: Including custom run-time hook 'D:/GPT-Work/2026-10-23/referenced-chatgpt-conversation-this-is-an-12/work/source/windowed_runtime.py'
+24738 INFO: Including run-time hook 'pyi_rth_inspect.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+24742 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+24746 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+24749 INFO: Including run-time hook 'pyi_rth__tkinter.py' from 'C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks'
+24777 INFO: Creating base_library.zip...
+24799 INFO: Looking for dynamic libraries
+customtkinter.windows.widgets.font warning: Preferred drawing method 'font_shapes' can not be used because the font file could not be loaded.
+Using 'circle_shapes' instead. The rendering quality will be bad!
+25939 INFO: Extra DLL search directories (AddDllDirectory): ['C:\\Users\\max00\\AppData\\Local\\Programs\\Python\\Python313\\Lib\\site-packages\\numpy.libs']
+25939 INFO: Extra DLL search directories (PATH): []
+27520 INFO: Warnings written to D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker\warn-PDFUnlocker.txt
+27566 INFO: Graph cross-reference written to D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker\xref-PDFUnlocker.html
+27611 INFO: checking PYZ
+27611 INFO: Building PYZ because PYZ-00.toc is non existent
+27611 INFO: Building PYZ (ZlibArchive) D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker\PYZ-00.pyz
+28110 INFO: Building PYZ (ZlibArchive) D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker\PYZ-00.pyz completed successfully.
+28123 INFO: checking PKG
+28124 INFO: Building PKG because PKG-00.toc is non existent
+28124 INFO: Building PKG (CArchive) PDFUnlocker.pkg
+28157 INFO: Building PKG (CArchive) PDFUnlocker.pkg completed successfully.
+28158 INFO: Bootloader C:\Users\max00\AppData\Local\Programs\Python\Python313\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\runw.exe
+28158 INFO: checking EXE
+28159 INFO: Building EXE because EXE-00.toc is non existent
+28159 INFO: Building EXE from EXE-00.toc
+28159 INFO: Copying bootloader EXE to D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\pyinstaller\PDFUnlocker\PDFUnlocker.exe
+28165 INFO: Copying icon to EXE
+28169 INFO: Copying 0 resources to EXE
+28169 INFO: Embedding manifest in EXE
+28172 INFO: Appending PKG archive to EXE
+28176 INFO: Fixing EXE headers
+28242 INFO: Building EXE from EXE-00.toc completed successfully.
+28251 INFO: checking COLLECT
+28251 INFO: Building COLLECT because COLLECT-00.toc is non existent
+28252 INFO: Building COLLECT COLLECT-00.toc
+31588 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+31608 INFO: Build complete! The results are available in: D:\GPT-Work\2026-10-23\referenced-chatgpt-conversation-this-is-an-12\work\app

@@ -1,0 +1,77 @@
+PDFUnlocker - Third-Party Notices
+=================================
+
+PDFUnlocker itself is licensed under the MIT License (see LICENSE).
+The Windows distribution bundles the third-party components listed below.
+Each component remains under its own license. Full license texts are kept in
+the "licenses" folder of the distribution ZIP; the original texts can also be
+found at the URLs below.
+
+Python runtime and standard extensions
+--------------------------------------
+Python 3.13.17
+  License: PSF-2.0 (Python Software Foundation License)
+  URL: https://www.python.org/  /  https://docs.python.org/3/license.html
+Tcl/Tk 8.6.15 (bundled with Python, used by tkinter)
+  License: TCL license (BSD-style)
+  URL: https://www.tcl-lang.org/software/tcltk/license.html
+OpenSSL 3.5.9 (libssl-3.dll / libcrypto-3.dll, bundled with Python)
+  License: Apache-2.0
+  URL: https://www.openssl.org/
+libffi (libffi-8.dll, bundled with Python)
+  License: MIT
+  URL: https://github.com/libffi/libffi
+zlib 1.3.1 (zlib1.dll, bundled with Python)
+  License: Zlib
+  URL: https://zlib.net/
+
+Python packages
+---------------
+CustomTkinter 6.0.0
+  License: MIT (Copyright (c) 2023 Tom Schimansky)
+  URL: https://github.com/TomSchimansky/CustomTkinter
+darkdetect 0.8.0
+  License: BSD-3-Clause (Copyright (c) 2019, Alberto Sottile)
+  URL: https://github.com/albertosottile/darkdetect
+packaging 26.3
+  License: Apache-2.0 OR BSD-2-Clause
+  URL: https://github.com/pypa/packaging
+Pillow 13.0.0
+  License: MIT-CMU (HPND)
+  URL: https://python-pillow.org/
+  Pillow's Windows wheel statically includes: brotli 1.2.0 (MIT),
+  FreeType 2.14.3 (FreeType License), HarfBuzz 14.5.0 (MIT-style),
+  Little CMS 2.19.1 (MIT), libavif 1.4.2 (BSD-2-Clause, with its codecs),
+  libjpeg-turbo 3.2.0 (IJG / BSD-3-Clause / Zlib), libpng 1.6.58 (libpng),
+  libwebp 1.6.0 (BSD-3-Clause), OpenJPEG 2.5.4 (BSD-2-Clause),
+  libtiff 4.7.2 (libtiff), xz 5.8.4 (0BSD), zlib-ng 2.3.3 (Zlib).
+  Portions of this software are copyright (c) 2026 The FreeType Project
+  (https://freetype.org). All rights reserved.
+PyInstaller 6.22.3 (bootloader only)
+  License: GPL-2.0-or-later with the PyInstaller Bootloader Exception,
+  which permits distributing the bundled program under any license.
+  URL: https://pyinstaller.org/
+
+External tool
+-------------
+qpdf 12.4.2 (qpdf.exe, qpdf30.dll; official unmodified binaries)
+  License: Apache-2.0 (see licenses/qpdf/LICENSE.txt and NOTICE.md)
+  Copyright (c) 2005-2021 Jay Berkenbilt, 2022-2026 Jay Berkenbilt and
+  Manfred Holger
+  URL: https://qpdf.sourceforge.io/  /  https://github.com/qpdf/qpdf
+  Statically linked into qpdf:
+    zlib 1.3.2 (Zlib)                - https://zlib.net/
+    OpenSSL 3.6.4 (Apache-2.0)       - https://www.openssl.org/
+    libjpeg-turbo 3.2.0 (IJG / BSD-3-Clause / Zlib)
+                                     - https://libjpeg-turbo.org/
+    libspng 0.7.4 (BSD-2-Clause)     - https://libspng.org/
+
+Microsoft Visual C++ runtime
+----------------------------
+msvcp140.dll, vcruntime140.dll, vcruntime140_1.dll
+  License: Microsoft Visual C++ Redistributable license terms
+  URL: https://visualstudio.microsoft.com/license-terms/vs2022-cruntime/
+
+Acknowledgements
+----------------
+This software is based in part on the work of the Independent JPEG Group.

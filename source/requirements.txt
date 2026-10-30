@@ -1,0 +1,4 @@
+# Top-level dependencies (Python 3.13 x64). Exact build set: requirements.lock.txt
+customtkinter==6.0.0
+pyinstaller==6.22.3
+pillow==13.0.0
