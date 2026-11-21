@@ -4,11 +4,15 @@
 
 ## 下載與使用
 
-v1.0.3 為本機候選版。已正式發布的版本見 [GitHub Release v1.0.2](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.2)。
+目前穩定版為 v1.0.3 Security Update，適用 Windows x64。 [GitHub Release v1.0.3](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.3)
 
-- [免安裝分享版 ZIP](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.2/PDFUnlocker-v1.0.2-Portable-Windows-x64.zip)：完整解壓後，執行 `PDFUnlocker-v1.0.2-Portable/PDFUnlocker/PDFUnlocker.exe`。
-- [v1.0.2 SHA256SUMS.txt](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.2/SHA256SUMS.txt)：v1.0.2 正式 ZIP 的 SHA-256。
-- 原始碼可 clone 本倉庫或使用 Release 的 Source code 下載；ZIP 亦含 `source/`、授權與驗收紀錄。
+- 下載免安裝分享版，完整解壓後執行 `PDFUnlocker-v1.0.3-Portable/PDFUnlocker/PDFUnlocker.exe`。 [Portable ZIP](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.3/PDFUnlocker-v1.0.3-Portable-Windows-x64.zip)
+- 以 PowerShell 計算 ZIP 的 SHA-256，再核對清單中同一個 ZIP 檔名對應的值。 [SHA256SUMS.txt](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.3/SHA256SUMS.txt)
+- ZIP 一併提供 `source/`、授權與驗收紀錄。也可從 Release 頁面的 Source code 下載原始碼。
+
+```powershell
+Get-FileHash -Algorithm SHA256 -LiteralPath .\PDFUnlocker-v1.0.3-Portable-Windows-x64.zip
+```
 
 適用目標為 Windows 10/11 x64。Python、qpdf 與所需執行階段隨附，不必另行安裝或設定 PATH。請保留完整資料夾，尤其 `_internal` 與 `licenses`，不要只複製 EXE。詳細操作見 [使用說明](使用說明.md)。
 
@@ -23,6 +27,7 @@ v1.0.3 為本機候選版。已正式發布的版本見 [GitHub Release v1.0.2](
 - 封裝版只使用隨附的 qpdf。若執行檔或必要 DLL 缺失，請重新下載或完整解壓。
 - 保留有來源標記的 PDF 所帶的 Windows `Zone.Identifier`。標記無法讀取或保留時，該檔案處理失敗。解鎖後的 PDF 仍可能包含 JavaScript、附件等主動內容。
 - 路徑檢查涵蓋掃描根目錄及交付輸出的各層目錄，並在處理時保留控制代碼。其他人可寫入的共用資料夾仍可能有競爭風險。
+- 限制 qpdf 輸出占用的記憶體，並在取消或逾時時終止子程序。建置時驗證 Python 套件與內附 qpdf 檔案的 SHA-256。
 
 完整變更見 [CHANGELOG](CHANGELOG.md)。
 
