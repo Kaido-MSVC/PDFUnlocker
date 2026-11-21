@@ -1,13 +1,13 @@
-# PDFUnlocker v1.0.2 — Windows x64
+# PDFUnlocker v1.0.3 Security Update — Windows x64
 
-離線 PDF 批次解鎖桌面工具，支援多檔、資料夾掃描與個別密碼詢問。需提供有效的 PDF 開啟密碼，同名輸出會另行編號。作者與發布者：**Kaido-MSVC**。
+離線 PDF 批次解鎖桌面工具，支援多檔、資料夾掃描與個別密碼詢問。設有開啟密碼的 PDF 須提供有效密碼，同名輸出會另行編號。作者與發布者：**Kaido-MSVC**。
 
 ## 下載與使用
 
-正式下載見 [GitHub Release v1.0.2](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.2)。
+v1.0.3 為本機候選版。已正式發布的版本見 [GitHub Release v1.0.2](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.2)。
 
 - [免安裝分享版 ZIP](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.2/PDFUnlocker-v1.0.2-Portable-Windows-x64.zip)：完整解壓後，執行 `PDFUnlocker-v1.0.2-Portable/PDFUnlocker/PDFUnlocker.exe`。
-- [SHA256SUMS.txt](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.2/SHA256SUMS.txt)：本次正式 ZIP 的 SHA-256。
+- [v1.0.2 SHA256SUMS.txt](https://github.com/Kaido-MSVC/PDFUnlocker/releases/download/v1.0.2/SHA256SUMS.txt)：v1.0.2 正式 ZIP 的 SHA-256。
 - 原始碼可 clone 本倉庫或使用 Release 的 Source code 下載；ZIP 亦含 `source/`、授權與驗收紀錄。
 
 適用目標為 Windows 10/11 x64。Python、qpdf 與所需執行階段隨附，不必另行安裝或設定 PATH。請保留完整資料夾，尤其 `_internal` 與 `licenses`，不要只複製 EXE。詳細操作見 [使用說明](使用說明.md)。
@@ -16,29 +16,30 @@
 2. 可選填共用密碼；個別檔案密碼不同時會詢問，可重試、跳過或取消剩餘工作。
 3. 按「開始解鎖」，結果存到各原檔旁的 `Unlocked` 資料夾。同名自動加 `(2)`、`(3)`，不覆蓋原檔或既有輸出。
 
-需要開啟密碼的 PDF 仍須提供有效密碼，本工具不猜測密碼。密碼透過標準輸入傳給 qpdf，不放進命令列、密碼檔或紀錄；換行與 NUL 不接受。資料夾掃描排除 `Unlocked` 與目錄連結。取消會等目前的 qpdf 操作結束，每次操作最多 5 分鐘。
+需要開啟密碼的 PDF 仍須提供有效密碼。密碼透過標準輸入傳給 qpdf。程式拒絕換行與 NUL，並略過掃描中的 `Unlocked`、符號連結與目錄接合點。取消會終止目前的 qpdf 子程序並清理暫存檔。各階段的 qpdf 子程序逾時上限為 5 分鐘。
 
-## v1.0.2 變更
+## v1.0.3 安全變更
 
-詳見 [v1.0.2 發行說明](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.2)。
+- 封裝版只使用隨附的 qpdf。若執行檔或必要 DLL 缺失，請重新下載或完整解壓。
+- 保留有來源標記的 PDF 所帶的 Windows `Zone.Identifier`。標記無法讀取或保留時，該檔案處理失敗。解鎖後的 PDF 仍可能包含 JavaScript、附件等主動內容。
+- 路徑檢查涵蓋掃描根目錄及交付輸出的各層目錄，並在處理時保留控制代碼。其他人可寫入的共用資料夾仍可能有競爭風險。
 
-- 新增 MIT 授權、第三方元件聲明，以及「說明 > 關於」視窗，可查看版本、作者、LICENSE 全文與第三方清單。
-- 建置固定使用 `source/.venv` 的 Python 3.13，加入固定版本相依清單。
-- 移除未使用的建置相依與負載；沿用已驗收的 PDF 處理核心及 qpdf 二進位。
+完整變更見 [CHANGELOG](CHANGELOG.md)。
 
 ## 建置
 
-Python 3.13.17 x64、CustomTkinter 6.0.0、Pillow 13.0.0、PyInstaller 6.22.3；內附 qpdf 12.4.2。完整建置套件版本見 [requirements.lock.txt](source/requirements.lock.txt)。
+Python 3.14.10 x64、CustomTkinter 6.0.0、Pillow 13.0.0、PyInstaller 6.22.3，內附 qpdf 12.4.2。完整建置套件版本與 Windows x64 wheel 雜湊見 [requirements.lock.txt](source/requirements.lock.txt)。
 
 在 `source` 目錄執行：
 
 ```powershell
-py -3.13 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.lock.txt
-.\build.ps1
+py -3.14 -m venv ../.venv-pdfunlocker-314
+$python = '..\.venv-pdfunlocker-314\Scripts\python.exe'
+& $python -m pip --isolated install --require-hashes --only-binary=:all: --index-url https://pypi.org/simple -r requirements.lock.txt
+.\build.ps1 -Python $python
 ```
 
-建置腳本不下載 qpdf，使用 `source/tools/qpdf` 內已驗證的官方二進位；缺少 Python 3.13 虛擬環境時停止。建置輸出位於專案根目錄 `app/`，原始碼測試與冒煙測試入口在 `source/`。
+建置前會驗證 `source/tools/qpdf` 中五個官方二進位檔的 SHA-256。檔案缺失或雜湊不符時會停止建置。預設輸出位於專案根目錄 `app/`，可用 `-DistPath` 指定獨立目錄。從 `source/` 可執行 `python -m unittest discover -v`。
 
 ## 授權
 
@@ -56,8 +57,4 @@ py -3.13 -m venv .venv
 
 ## 驗證與限制
 
-沿用 2026-10-30 v1.0.2 已驗收的程式與分享包：30 項單元測試通過，EXE 與解壓後分享包在清空 PATH 下完成冒煙測試，關於視窗已實際驗收。冒煙流程包含預期失敗與跳過案例，不代表所有輸入 PDF 都能成功。詳見 [v1.0.2 驗收報告](archives/PDFUnlocker-v1.0.2-免設定分享版-驗收報告.md) 及 [驗收紀錄](驗收紀錄/v1.0.2)。
-
-本次 GitHub 發布核對既有 ZIP SHA-256、包內逐檔清單、原始碼與授權一致性，未重新編譯或重跑已通過且不受影響的整套測試。未另做乾淨 Windows 虛擬機或全版本 Windows 相容性測試。歷史報告與紀錄保留當時的本機路徑及發布前狀態；正式下載以 Release 附件為準。
-
-`archives/*.zip` 已排除在 Git 版控外，正式 ZIP 透過 GitHub Releases 發布。倉庫內 `archives/SHA256SUMS.txt` 保留歷史封裝紀錄；Release 附件的同名清單僅列本次正式 ZIP。
+安全回歸測試可核對 `Zone.Identifier` 的內容。檔案總管的預覽行為會依 Windows 版本、更新、原則及 PDF 預覽處理常式而異。歷史驗收詳見 [v1.0.2 發行說明](https://github.com/Kaido-MSVC/PDFUnlocker/releases/tag/v1.0.2)。

@@ -9,10 +9,10 @@ found at the URLs below.
 
 Python runtime and standard extensions
 --------------------------------------
-Python 3.13.17
+Python 3.14.10
   License: PSF-2.0 (Python Software Foundation License)
   URL: https://www.python.org/  /  https://docs.python.org/3/license.html
-Tcl/Tk 8.6.15 (bundled with Python, used by tkinter)
+Tcl/Tk 9.0.4 (bundled with Python, used by tkinter)
   License: TCL license (BSD-style)
   URL: https://www.tcl-lang.org/software/tcltk/license.html
 OpenSSL 3.5.9 (libssl-3.dll / libcrypto-3.dll, bundled with Python)
@@ -21,9 +21,18 @@ OpenSSL 3.5.9 (libssl-3.dll / libcrypto-3.dll, bundled with Python)
 libffi (libffi-8.dll, bundled with Python)
   License: MIT
   URL: https://github.com/libffi/libffi
-zlib 1.3.1 (zlib1.dll, bundled with Python)
+zlib-ng (zlib-compatible implementation used by Python)
+  License: Zlib
+  URL: https://github.com/zlib-ng/zlib-ng
+zlib 1.3.2 (zlib1.dll, bundled with Python)
   License: Zlib
   URL: https://zlib.net/
+Zstandard 1.5.7 (bundled with Python)
+  License: BSD-3-Clause
+  URL: https://github.com/facebook/zstd
+Expat 2.9.0 (bundled with Python)
+  License: MIT
+  URL: https://libexpat.github.io/
 
 Python packages
 ---------------

@@ -1,29 +1,55 @@
-param([string]$BuildWork = (Join-Path $PSScriptRoot 'build'))
+﻿param(
+    [string]$BuildWork = (Join-Path $PSScriptRoot 'build'),
+    [string]$DistPath = (Join-Path $PSScriptRoot '../app'),
+    [string]$Python = (Join-Path $PSScriptRoot '.venv/Scripts/python.exe')
+)
 $ErrorActionPreference = 'Stop'
-Set-Location -LiteralPath $PSScriptRoot
-# Always build with the project's Python 3.13 venv, never whatever "python" resolves to on PATH.
-$python = Join-Path $PSScriptRoot '.venv\Scripts\python.exe'
-if (-not (Test-Path -LiteralPath $python)) {
-    Write-Error "Missing $python. Create it with: py -3.13 -m venv .venv; .venv\Scripts\python.exe -m pip install -r requirements.lock.txt" -ErrorAction Continue
-    exit 1
+$BuildWork = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($BuildWork)
+$DistPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($DistPath)
+if (-not (Test-Path -LiteralPath $Python -PathType Leaf)) {
+    throw '找不到建置用 Python。請建立 Python 3.14.10 x64 虛擬環境，並依 README 安裝雜湊鎖定的套件。'
 }
-& $python -c "import sys; sys.exit(sys.version_info[:2] != (3, 13))"
-if ($LASTEXITCODE -ne 0) { throw '.venv must be Python 3.13' }
-& $python make_icon.py
-if ($LASTEXITCODE -ne 0) { throw 'Icon generation failed' }
+$Python = (Resolve-Path -LiteralPath $Python).Path
 $appIcon = Join-Path $PSScriptRoot 'assets/app.ico'
 $appAssets = Join-Path $PSScriptRoot 'assets'
 $runtimeHook = Join-Path $PSScriptRoot 'windowed_runtime.py'
 $qpdfBundle = Join-Path $PSScriptRoot 'tools/qpdf'
-foreach ($required in @('qpdf.exe', 'qpdf30.dll', 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll')) {
-    if (-not (Test-Path -LiteralPath (Join-Path $qpdfBundle $required))) { throw "Missing bundled qpdf file: $required" }
+$requiredQpdf = @('qpdf.exe', 'qpdf30.dll', 'msvcp140.dll', 'vcruntime140.dll', 'vcruntime140_1.dll')
+$qpdfManifest = @{}
+foreach ($line in Get-Content -LiteralPath (Join-Path $PSScriptRoot 'qpdf-sha256.txt')) {
+    if ($line -match '^\s*(#.*)?$') { continue }
+    if ($line -notmatch '^([0-9a-f]{64})\s+([a-z0-9_.]+)$') { throw 'qpdf SHA-256 清單格式錯誤。' }
+    if ($Matches[2] -notin $requiredQpdf -or $qpdfManifest.ContainsKey($Matches[2])) {
+        throw 'qpdf SHA-256 清單含有非預期或重複的檔案。'
+    }
+    $qpdfManifest.Add($Matches[2], $Matches[1])
+}
+$qpdfItems = @(Get-ChildItem -LiteralPath $qpdfBundle -Force)
+if ($qpdfManifest.Count -ne $requiredQpdf.Count -or $qpdfItems.Count -ne $requiredQpdf.Count) {
+    throw 'qpdf 封裝檔案與 SHA-256 清單不符。'
+}
+foreach ($item in $qpdfItems) {
+    if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) -or
+        !$qpdfManifest.ContainsKey($item.Name) -or
+        (Get-FileHash -LiteralPath $item.FullName -Algorithm SHA256).Hash -ne $qpdfManifest[$item.Name]) {
+        throw "qpdf 檔案未通過 SHA-256 驗證：$($item.Name)"
+    }
 }
 $license = Join-Path $PSScriptRoot 'LICENSE'
 $notices = Join-Path $PSScriptRoot 'THIRD_PARTY_NOTICES.txt'
-foreach ($required in @($license, $notices)) {
-    if (-not (Test-Path -LiteralPath $required)) { throw "Missing license file: $required" }
+foreach ($required in @($appIcon, $runtimeHook, $license, $notices, (Join-Path $PSScriptRoot 'requirements.lock.txt'))) {
+    if (-not (Test-Path -LiteralPath $required -PathType Leaf)) { throw "缺少建置必要檔案：$required" }
 }
-# Unused packages; guards against them leaking in if they ever get installed in the venv.
-$excludes = foreach ($module in @('numpy', 'psutil', 'yaml', 'charset_normalizer')) { '--exclude-module', $module }
-& $python -m PyInstaller --noconfirm --clean --onedir --windowed --noupx --name PDFUnlocker --icon $appIcon --add-data "$appAssets;assets" --add-data "$qpdfBundle;tools/qpdf" --add-data "$license;." --add-data "$notices;." @excludes --collect-all customtkinter --runtime-hook $runtimeHook --hidden-import smoke --hidden-import test_core --distpath ../app --workpath $BuildWork --specpath $BuildWork app.py
-if ($LASTEXITCODE -ne 0) { throw 'PyInstaller failed' }
+& $Python -I -c "import platform, struct, sys; sys.exit(not (sys.version_info[:3] == (3, 14, 10) and platform.machine() == 'AMD64' and struct.calcsize('P') == 8 and sys.prefix != sys.base_prefix))"
+if ($LASTEXITCODE -ne 0) { throw '需要 Python 3.14.10 x64 虛擬環境。' }
+& $Python -I -m pip check
+if ($LASTEXITCODE -ne 0) { throw '建置套件相依檢查失敗。' }
+
+Push-Location -LiteralPath $PSScriptRoot
+try {
+    $excludes = foreach ($module in @('numpy', 'psutil', 'yaml', 'charset_normalizer')) { '--exclude-module', $module }
+    & $Python -I -m PyInstaller --noconfirm --clean --onedir --contents-directory _internal --windowed --noupx --name PDFUnlocker --icon $appIcon --add-data "$appAssets;assets" --add-data "$qpdfBundle;tools/qpdf" --add-data "$license;." --add-data "$notices;." @excludes --collect-all customtkinter --runtime-hook $runtimeHook --hidden-import smoke --hidden-import test_core --distpath $DistPath --workpath $BuildWork --specpath $BuildWork app.py
+    if ($LASTEXITCODE -ne 0) { throw 'PyInstaller 建置失敗。' }
+} finally {
+    Pop-Location
+}

@@ -1,5 +1,6 @@
 # Python virtual environment (recreate from source/requirements.lock.txt)
 .venv/
+/.venv-pdfunlocker-314/
 
 # PyInstaller intermediates and raw build output (build.ps1 writes ../app)
 /source/build/
@@ -10,6 +11,7 @@
 # archives/SHA256SUMS.txt and the archived acceptance reports stay tracked.
 /PDFUnlocker/
 /archives/*.zip
+/candidate-v1.0.3/
 
 # Python bytecode
 __pycache__/

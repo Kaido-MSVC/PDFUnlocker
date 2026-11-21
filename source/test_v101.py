@@ -19,7 +19,7 @@ class DiscoveryFaultTests(unittest.TestCase):
         self.root = Path(self.tmp.name)
 
     def test_file_errors_keep_prior_and_later_results(self):
-        for operation in ('is_symlink', 'resolve', 'absolute'):
+        for operation in ('lstat',):
             for error_type in (PermissionError, FileNotFoundError):
                 with self.subTest(operation=operation, error=error_type):
                     paths = [self.root / name for name in ('a.pdf', 'b.pdf', 'c.PDF')]
@@ -39,7 +39,7 @@ class DiscoveryFaultTests(unittest.TestCase):
                             self.assertEqual(ignored, 1)
 
     def test_directory_errors_prune_only_bad_child(self):
-        for operation in ('is_symlink', 'is_junction'):
+        for operation in ('lstat',):
             with self.subTest(operation=operation):
                 for name in ('bad', 'good', 'Unlocked'):
                     folder = self.root / name
@@ -62,26 +62,22 @@ class DiscoveryFaultTests(unittest.TestCase):
     def test_top_level_error_continues_to_next_input(self):
         bad, good = self.root / 'bad', self.root / 'good.pdf'
         good.touch()
-        original = Path.is_dir
+        original = Path.lstat
 
         def fail_one(path):
             if path == bad:
                 raise PermissionError('injected')
             return original(path)
 
-        with patch.object(Path, 'is_dir', fail_one):
+        with patch.object(Path, 'lstat', fail_one):
             self.assertEqual(discover([bad, good]), ([good], 1))
 
     def test_walk_error_and_cancellation(self):
         good = self.root / 'good.pdf'
         good.touch()
 
-        def walk(root, **kwargs):
-            kwargs['onerror'](PermissionError('injected'))
-            yield str(root), [], [good.name]
-
-        with patch('core.os.walk', walk):
-            self.assertEqual(discover([self.root]), ([good], 1))
+        with patch.object(Path, 'iterdir', side_effect=PermissionError('injected')):
+            self.assertEqual(discover([self.root, good]), ([good], 1))
         cancel = threading.Event()
         cancel.set()
         self.assertEqual(discover([self.root], cancel), ([], 0))

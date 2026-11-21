@@ -8,7 +8,7 @@ import traceback
 
 
 def run(report: Path):
-    from app import App
+    from app import App, VERSION, read_document
     from test_core import create_fixture
     from core import Qpdf
     import customtkinter as ctk
@@ -22,6 +22,9 @@ def run(report: Path):
             folder = Path(temporary)
             restricted = create_fixture(folder, '繁中 日本語 & [#] 😀.pdf')
             locked = create_fixture(folder, '開啟密碼.pdf', '測試密碼')
+            marker = b'[ZoneTransfer]\r\nZoneId=3\r\n'
+            locked_zone = Path(f'{locked}:Zone.Identifier')
+            locked_zone.write_bytes(marker)
             qpdf = Qpdf()
             from core import bundled_qpdf
             assert Path(qpdf.executable) == bundled_qpdf()
@@ -59,6 +62,8 @@ def run(report: Path):
             assert '批次完成' in app.status.cget('text')
             assert dialog_tested
             assert ticks[0] > 3, 'GUI event loop did not tick'
+            output_zone = folder / 'Unlocked' / f'{locked.name}:Zone.Identifier'
+            assert output_zone.read_bytes() == locked_zone.read_bytes() == marker
             for path, digest in hashes.items():
                 assert hashlib.sha256(path.read_bytes()).hexdigest() == digest
             app.update_idletasks()
@@ -119,8 +124,24 @@ def run(report: Path):
                 assert abs(app.progress.get() - 1 / 3) < .001
                 error_dialog.assert_called_once()
             assert not errors, errors
+            app.show_about()
+            app.update()
+            assert VERSION == '1.0.3' and app.about.winfo_viewable()
+            assert 'MIT License' in read_document('LICENSE')
+            assert 'Python 3.14.10' in read_document('THIRD_PARTY_NOTICES.txt')
+            app.about.destroy()
+            deep = folder
+            while len(str(deep)) < 265:
+                deep /= '繁中 測試路徑' * 3
+                deep.mkdir()
+            long_pdf = create_fixture(deep, '長路徑 密碼.pdf', '測試密碼')
+            long_output, _ = qpdf.decrypt(long_pdf, '測試密碼')
+            assert len(str(long_output)) > 260
+            assert qpdf.kind(long_output) == 'plain'
             data.update(ok=True, counts=first_counts, gui_heartbeat_ticks=ticks[0],
                         individual_password_dialog=True, original_hashes_unchanged=True,
+                        motw_preserved=True,
+                        about_visible=True, long_path=True, version=VERSION,
                         cancel_dialog_counts={'success': 0, 'fail': 0, 'skip': 2}, async_folder_scan=True,
                         abnormal_worker_status=True, unfinished_rows_marked=True,
                         minimum_window=[app.winfo_width(), app.winfo_height()],
@@ -131,6 +152,7 @@ def run(report: Path):
         if app:
             app.destroy()
         report.parent.mkdir(parents=True, exist_ok=True)
-        report.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
+        with report.open('x', encoding='utf-8') as stream:
+            json.dump(data, stream, ensure_ascii=False, indent=2)
     if not data['ok']:
         raise SystemExit(1)

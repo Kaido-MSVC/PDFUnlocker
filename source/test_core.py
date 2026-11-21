@@ -9,7 +9,8 @@ import threading
 import unittest
 from unittest.mock import patch
 
-from core import Qpdf, ProcessingError, discover, process_batch
+from core import Qpdf, ProcessingError, QpdfResult, discover, process_batch
+from windows_files import native_path
 
 
 def create_fixture(folder, name='限制.pdf', password='', bits=256):
@@ -35,17 +36,17 @@ def create_fixture(folder, name='限制.pdf', password='', bits=256):
     base = folder / '_fixture_base.tmp'
     base.write_bytes(pdf)
     # @- is qpdf's documented argument-file stdin interface (one argument per line).
-    arguments = [str(base), '--encrypt', f'--user-password={password}',
+    arguments = [str(native_path(base)), '--encrypt', f'--user-password={password}',
                  '--owner-password=fixture-owner', f'--bits={bits}',
                  '--print=none', '--extract=n']
     if bits == 128:
         arguments.append('--use-aes=y')
-    arguments.extend(['--', str(target)])
+    arguments.extend(['--', str(native_path(target))])
     try:
         result = subprocess.run([q.executable, '@-'],
                                 input=('\n'.join(arguments) + '\n').encode('utf-8'),
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                                creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0), timeout=10)
     finally:
         base.unlink(missing_ok=True)
     if result.returncode not in (0, 3):
@@ -86,8 +87,10 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(calls, [])
         for r in result[:2]:
             self.assertEqual(self.q.kind(r.output), 'plain')
-            self.assertEqual(self.q.run(['--show-npages', str(r.output)]).stdout.strip(), b'1')
-            self.assertIn(b'PDF Unlocker fixture', self.q.run(['--qdf', '--stream-data=uncompress', str(r.output), '-']).stdout)
+            options = dict(stderr=subprocess.DEVNULL, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW)
+            self.assertEqual(subprocess.check_output([self.q.executable, '--show-npages', str(r.output)], **options).strip(), b'1')
+            self.assertIn(b'PDF Unlocker fixture', subprocess.check_output(
+                [self.q.executable, '--qdf', '--stream-data=uncompress', str(r.output), '-'], **options))
         for path, digest in originals.items():
             self.assertEqual(hashlib.sha256(path.read_bytes()).digest(), digest)
 
@@ -153,24 +156,24 @@ class CoreTests(unittest.TestCase):
         self.assertEqual([r.state for r in results], ['skip', 'skip'])
 
     def test_password_only_in_pipe_and_no_shell(self):
-        fake = subprocess.CompletedProcess([], 0, b'', b'')
-        with patch('core.subprocess.run', return_value=fake) as run:
+        with patch('core.subprocess.Popen') as run, patch.object(self.q, '_wait') as wait:
             self.q.run(['--requires-password', str(self.folder / 'input.pdf')], '測試 Secret #')
         args, kwargs = run.call_args
         self.assertNotIn('測試 Secret #', ' '.join(args[0]))
         self.assertIn('--password-file=-', args[0])
-        self.assertEqual(kwargs['input'], '測試 Secret #\n'.encode())
+        self.assertEqual(wait.call_args.args[1], '測試 Secret #\n'.encode())
         self.assertFalse(kwargs['shell'])
+        self.assertEqual(kwargs['stdout'], subprocess.DEVNULL)
 
-    def test_timeout_is_sanitized(self):
-        with patch('core.subprocess.run', side_effect=subprocess.TimeoutExpired(['qpdf'], 300, stderr=b'SECRET')):
+    def test_launch_error_is_sanitized(self):
+        with patch('core.subprocess.Popen', side_effect=OSError('SECRET')):
             with self.assertRaises(ProcessingError) as caught:
                 self.q.run(['--check', 'test.pdf'], 'SECRET')
         self.assertNotIn('SECRET', str(caught.exception))
 
     def test_output_failure_cleans_temp(self):
         path = create_fixture(self.folder)
-        fake = subprocess.CompletedProcess([], 2, b'', b'SECRET')
+        fake = QpdfResult(2, True)
         with patch.object(self.q, 'run', return_value=fake):
             with self.assertRaises(ProcessingError):
                 self.q.decrypt(path, '')
@@ -201,15 +204,15 @@ class CoreTests(unittest.TestCase):
         self.assertEqual(blocked.read_bytes(), b'keep this existing file')
 
     def test_missing_qpdf(self):
-        with patch('core.bundled_qpdf', return_value=self.folder / 'missing-qpdf.exe'), patch('core.shutil.which', return_value=None):
+        with patch('core.bundled_qpdf', return_value=self.folder / 'missing-qpdf.exe'):
             with self.assertRaises(ProcessingError):
                 Qpdf()
 
     def test_failed_verification_never_publishes(self):
         path = create_fixture(self.folder)
-        good = subprocess.CompletedProcess([], 0, b'', b'')
-        bad = subprocess.CompletedProcess([], 2, b'', b'')
-        with patch.object(self.q, 'run', side_effect=[good, bad, bad]):
+        good = QpdfResult(0)
+        bad = QpdfResult(2)
+        with patch.object(self.q, 'run', side_effect=[good, bad]):
             with self.assertRaises(ProcessingError):
                 self.q.decrypt(path, '')
         self.assertEqual(list((self.folder / 'Unlocked').iterdir()), [])

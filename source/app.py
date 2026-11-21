@@ -16,7 +16,7 @@ from core import Qpdf, ProcessingError, discover, process_batch
 if ctk.DrawEngine.preferred_drawing_method == 'circle_shapes':
     ctk.DrawEngine.preferred_drawing_method = 'polygon_shapes'
 
-VERSION = '1.0.2'
+VERSION = '1.0.3'
 APP_NAME = 'PDF 批次解鎖（PDFUnlocker）'
 PUBLISHER = 'Kaido-MSVC'
 
@@ -305,7 +305,7 @@ class App(ctk.CTk):
     def cancel_remaining(self):
         self.cancel_event.set()
         self.cancel_button.configure(state='disabled')
-        self.status.configure(text='已取消剩餘工作；目前的 qpdf 操作會先完成（每次最多 5 分鐘）。')
+        self.status.configure(text='正在取消，並清理目前的暫存檔…')
         if self.dialog is not None:
             self.dialog.finish(None)
 
